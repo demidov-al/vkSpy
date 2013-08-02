@@ -28,6 +28,7 @@ class RepeatTimer(threading.Thread):
 sleepTime = 100.0
 fileName = "log.txt"
 startTime = None
+access_token, u_id = None, None
 
 def logChanges(dictionary):
 	with open(fileName, 'w') as f:
@@ -44,12 +45,12 @@ def get_all_friends(user_id, token):
 def get_online_friends(user_id, token):
 	return vk.call_api("friends.getOnline", ("user_id", user_id), token)
 
-def workingThreadRoutine(uemail, upassword, uid, uaccess_token, result):
-	resp = get_online_friends(uid, uaccess_token)
+def workingThreadRoutine(uemail, upassword, result):
+	resp = get_online_friends(u_id, access_token)
 	if resp == None:
 		print("token has expired")
-		uaccess_token, uid = vk.auth(uemail, upassword, "3336140", "friends")
-		workingThreadRoutine(uemail, upassword, uid, uaccess_token, result)
+		access_token, u_id = vk.auth(uemail, upassword, "3336140", "friends")
+		workingThreadRoutine(uemail, upassword, result)
 		return
 	print("{0} {1}".format(time.strftime("%d-%m-%Y %H:%M:%S", time.localtime()), resp))
 	for friend in resp:
