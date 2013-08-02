@@ -1,0 +1,1 @@
+Script for statistic keeping of friends online time in VK.com
